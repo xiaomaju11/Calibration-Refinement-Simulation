@@ -93,11 +93,9 @@ The diagnostic denominator is
 
 $$
 D(n,\mu,\Sigma)=
-\max\left\{
-n^{3/2}\lVert\Sigma\rVert_2,\,
-n\lVert\Sigma\rVert_F,\,
-n\sqrt{\log n}\lVert\mu\rVert_\Sigma
-\right\}.
+\max\lbrace n^{3/2}\|\Sigma\|_2,
+n\|\Sigma\|_F,
+n\sqrt{\log n}\|\mu\|_\Sigma\rbrace.
 $$
 
 The main diagnostics are
@@ -111,8 +109,7 @@ M_\mu
 $$
 
 $$
-T
-=
+T=
 \frac{n\lVert\mu\rVert_2^4}
 {n\lVert\mu\rVert_\Sigma^2+\lVert\Sigma\rVert_F^2+n\lVert\Sigma\rVert_2^2}.
 $$
@@ -120,10 +117,9 @@ $$
 For the isotropic case $\Sigma=I_d$, the code also records
 
 $$
-M_{\mathrm{iso}}
-=
+M_{\mathrm{iso}}=
 \frac{d}
-{\max\{n^2,\;n\sqrt{\log n}\lVert\mu\rVert_2\}}.
+{\max\lbrace n^2,n\sqrt{\log n}\lVert\mu\rVert_2\rbrace}.
 $$
 
 | CSV field | Mathematical symbol | Expression |
@@ -137,20 +133,8 @@ $$
 | `M_trace` | $M_{\mathrm{trace}}$ | $\mathrm{tr}(\Sigma)/D(n,\mu,\Sigma)$ |
 | `M_mu` | $M_\mu$ | $\lVert\mu\rVert_2^2/\lVert\mu\rVert_\Sigma$ |
 | `T` | $T$ | $\frac{n\lVert\mu\rVert_2^4}{n\lVert\mu\rVert_\Sigma^2+\lVert\Sigma\rVert_F^2+n\lVert\Sigma\rVert_2^2}$ |
-| `M_iso` | $M_{\mathrm{iso}}$ | $\frac{d}{\max\{n^2,\;n\sqrt{\log n}\lVert\mu\rVert_2\}}$ |
+| `M_iso` | $M_{\mathrm{iso}}$ | $\frac{d}{\max\lbrace n^2,n\sqrt{\log n}\lVert\mu\rVert_2\rbrace}$ |
 
-## Core Rules
-
-1. Do not report test accuracy, test error, ROC, AUC, or other test-risk metrics.
-2. Do not shrink main experiments into smoke runs. The $d$, $n$, $m$, parameter grids, and checkpoints below define the full main-pass scale.
-3. SVM experiments must use the real finite-sample Gram matrix $K=SS^\top$, not the deterministic equivalent
-
-$$
-Q_n=\mathrm{tr}(\Sigma)I_n+\lVert\mu\rVert_2^2\mathbf{1}\mathbf{1}^\top.
-$$
-
-4. All direction metrics must use $A_\Sigma(\cdot,\cdot)$.
-5. CSV outputs must keep theory diagnostics and solver diagnostics so that SVM-LS behavior, spectrum effects, signal strength, and finite-sample effects can be audited after the run.
 
 ## Covariance Structures
 
@@ -305,22 +289,21 @@ $$
 \rho=\frac{n}{d}=0.05,\qquad n=0.05d.
 $$
 
-Fixed-$d$ panel:
+Fixed- $d$ panel:
 
 $$
 d=20000,\qquad
-n\in\{50,100,200,400,800,1200,2000,3000\}.
+n\in\lbrace50,100,200,400,800,1200,2000,3000\rbrace.
 $$
 
 Both panels compare
 
 $$
 \Sigma\in
-\left\{
-I_d,\;
+\lbrace
+I_d\;
 \mathrm{diag}(1^{-\alpha},2^{-\alpha},\ldots,d^{-\alpha})
-\;:\;\alpha\in\{0.2,0.5,0.8\}
-\right\}.
+:\alpha\in\lbrace0.2,0.5,0.8\rbrace\rbrace.
 $$
 
 Other settings:
@@ -329,20 +312,6 @@ Other settings:
 - $\Sigma=I_d$ uses a geometric $\mu$ direction.
 - polynomial spectra use $\mu\parallel v_{\max}(\Sigma)$.
 - all non-identity $\Sigma$ settings fix $\lVert\mu\rVert_2\approx6.294$.
-
-Why retained:
-
-- It adds polynomial spectra to fixed-rate scaling, avoiding a scaling analysis only under $\Sigma=I_d$.
-- The old polynomial Panel A with fixed $n=100$ and varying $d$ is not kept as a standalone experiment because it mixes dimension growth with sample scarcity; it is replaced by varying $n$ at fixed $d=20000$.
-- It compares isotropic and non-identity spectra in the same experiment, clarifying how spectrum shape affects $A_\Sigma(\widehat w_{\mathrm{SVM}},W^*)$.
-
-Required checks:
-
-- `panel` must distinguish `fixed_rate_vary_d` and `fixed_d_vary_n`.
-- The fixed-rate panel must include $\Sigma=I_d$ and polynomial spectra with $\alpha\in\{0.2,0.5,0.8\}$.
-- The fixed-$d$ panel must fix $d=20000$ and vary only $n$.
-- Non-identity $\Sigma$ settings must record and verify $\lVert\mu\rVert_2\approx6.294$.
-- The CSV must save $A_\Sigma(\widehat w_{\mathrm{SVM}},W^*)$, $A_\Sigma(\widehat w_{\mathrm{SVM}},\widehat w_{\mathrm{LS}})$, $A_\Sigma(\widehat w_{\mathrm{LS}},W^*)$, $M_{\mathrm{trace}}$, $M_\mu$, $T$, $M_{\mathrm{iso}}$, and solver diagnostics.
 
 Outputs:
 
@@ -458,19 +427,6 @@ outputs/svm_alignment/exact_mu_eigendirection_ablation.png
 outputs/svm_alignment/exact_mu_eigendirection_ablation.pdf
 ```
 
-## Merged or Downgraded Older Experiments
-
-| Old experiment | Treatment | Where the check is retained |
-| --- | --- | --- |
-| `gd_alignment_by_sample_size` | not a main experiment | E1 retains the $\{w_t^{\mathrm{log}}:t\in\mathcal{T}_{\mathrm{GD}}\}$ optimization path |
-| `gd_alignment_by_ls` | not a main experiment | E1 and SVM CSV files retain $A_\Sigma(\cdot,\widehat w_{\mathrm{LS}})$ diagnostics |
-| `loss_comparison_isotropic` | merged | $\Sigma=I_d$ panel in E1 |
-| `exact_svm_alignment_fixed_d` | old entry and outputs removed | E2-E4 keep exact finite-sample SVM directions and solver diagnostics |
-| `exact_svm_alignment_fixed_rate` | merged | `fixed_rate_vary_d` panel in E2 |
-| `exact_svm_ls_equivalence_fixed_d` | no standalone run | E2-E4 include $A_\Sigma(\widehat w_{\mathrm{SVM}},\widehat w_{\mathrm{LS}})$ and $A_\Sigma(\widehat w_{\mathrm{LS}},W^*)$ |
-| `exact_isotropic_alignment_fixed_d` | merged | `fixed_d_vary_n` panel in E2 |
-| old polynomial Panel A: fixed $n$, varying $d$ | merged and rewritten | fixed-rate and fixed-$d$ sample-size panels in E2 |
-| `exact_theorem_alignment_trends` | analysis report only | `analysis/experiment_comparison_report.md` |
 
 ## Diagnostics Contrast
 
@@ -562,13 +518,3 @@ analysis/theorem_diagnostic_correlations.png
 analysis/theorem_diagnostic_correlations.pdf
 analysis/experiment_comparison_report.md
 ```
-
-## Completion Audit
-
-After a full experiment cleanup:
-
-1. `simulate_identical_logistic_gd_alignment.py --experiment all` should run only E1.
-2. `simulate_svm_alignment.py --experiment all` should run only E2, E3, and E4.
-3. `outputs/` should not contain artifacts from merged or downgraded old experiments.
-4. `analysis/experiment_comparison_report.md` should be recalculated only from retained experiments.
-5. `.DS_Store` and similar non-experiment artifacts should not be present in the output directories.
