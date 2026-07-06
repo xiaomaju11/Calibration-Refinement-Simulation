@@ -84,7 +84,7 @@ $$
 Spectrum quantities are
 
 $$
-\operatorname{tr}(\Sigma)=\sum_{j=1}^d\lambda_j,\qquad
+\mathrm{tr}(\Sigma)=\sum_{j=1}^d\lambda_j,\qquad
 \lVert\Sigma\rVert_2=\max_j\lambda_j,\qquad
 \lVert\Sigma\rVert_F=\sqrt{\sum_{j=1}^d\lambda_j^2}.
 $$
@@ -104,7 +104,7 @@ The main diagnostics are
 
 $$
 M_{\mathrm{trace}}
-=\frac{\operatorname{tr}(\Sigma)}{D(n,\mu,\Sigma)},
+=\frac{\mathrm{tr}(\Sigma)}{D(n,\mu,\Sigma)},
 \qquad
 M_\mu
 =\frac{\lVert\mu\rVert_2^2}{\lVert\mu\rVert_\Sigma},
@@ -131,13 +131,13 @@ $$
 | `mu_norm_l2` | $\lVert\mu\rVert_2$ | $\sqrt{\sum_{j=1}^d\mu_j^2}$ |
 | `mu_norm_sigma` | $\lVert\mu\rVert_\Sigma$ | $\sqrt{\mu^\top\Sigma\mu}$ |
 | `mu_norm_sigma_inv` | $\lVert\mu\rVert_{\Sigma^{-1}}$ | $\sqrt{\mu^\top\Sigma^{-1}\mu}$ |
-| `trace_sigma` | $\operatorname{tr}(\Sigma)$ | $\sum_{j=1}^d\lambda_j$ |
+| `trace_sigma` | $\mathrm{tr}(\Sigma)$ | $\sum_{j=1}^d\lambda_j$ |
 | `sigma_op_norm` | $\lVert\Sigma\rVert_2$ | $\max_{1\le j\le d}\lambda_j$ |
 | `sigma_fro_norm` | $\lVert\Sigma\rVert_F$ | $\sqrt{\sum_{j=1}^d\lambda_j^2}$ |
-| `M_trace` | $M_{\mathrm{trace}}$ | $\operatorname{tr}(\Sigma)/D(n,\mu,\Sigma)$ |
+| `M_trace` | $M_{\mathrm{trace}}$ | $\mathrm{tr}(\Sigma)/D(n,\mu,\Sigma)$ |
 | `M_mu` | $M_\mu$ | $\lVert\mu\rVert_2^2/\lVert\mu\rVert_\Sigma$ |
-| `T` | $T$ | $\dfrac{n\lVert\mu\rVert_2^4}{n\lVert\mu\rVert_\Sigma^2+\lVert\Sigma\rVert_F^2+n\lVert\Sigma\rVert_2^2}$ |
-| `M_iso` | $M_{\mathrm{iso}}$ | $\dfrac{d}{\max\{n^2,\;n\sqrt{\log n}\lVert\mu\rVert_2\}}$ |
+| `T` | $T$ | $\frac{n\lVert\mu\rVert_2^4}{n\lVert\mu\rVert_\Sigma^2+\lVert\Sigma\rVert_F^2+n\lVert\Sigma\rVert_2^2}$ |
+| `M_iso` | $M_{\mathrm{iso}}$ | $\frac{d}{\max\{n^2,\;n\sqrt{\log n}\lVert\mu\rVert_2\}}$ |
 
 ## Core Rules
 
@@ -146,7 +146,7 @@ $$
 3. SVM experiments must use the real finite-sample Gram matrix $K=SS^\top$, not the deterministic equivalent
 
 $$
-Q_n=\operatorname{tr}(\Sigma)I_n+\lVert\mu\rVert_2^2\mathbf{1}\mathbf{1}^\top.
+Q_n=\mathrm{tr}(\Sigma)I_n+\lVert\mu\rVert_2^2\mathbf{1}\mathbf{1}^\top.
 $$
 
 4. All direction metrics must use $A_\Sigma(\cdot,\cdot)$.
@@ -169,7 +169,7 @@ The `low_rank non-identity Sigma` setting is not a low-rank covariance matrix
 and is not singular. In the code it is a full-rank positive-definite matrix:
 
 $$
-\Sigma=\operatorname{diag}(\lambda_1,\ldots,\lambda_d),
+\Sigma=\mathrm{diag}(\lambda_1,\ldots,\lambda_d),
 $$
 
 where almost all $\lambda_j=1$, and only 16 spike coordinates have
@@ -177,7 +177,7 @@ $\lambda_j=2$. It should therefore be read as
 
 $$
 \Sigma=I_d+\Delta,\qquad
-\operatorname{rank}(\Delta)=16.
+\mathrm{rank}(\Delta)=16.
 $$
 
 This structure is used only as a non-identity covariance control in the loss
@@ -240,7 +240,7 @@ Full scale:
 - For every $\Sigma$, $\mu\parallel v_{\max}(\Sigma)$ and $\lVert\mu\rVert_2=s_\mu(20000)\approx6.294$. When $\Sigma=I_d$, the top eigenspace is non-unique, and the code uses one coordinate direction.
 - $\Sigma$ families:
   - `isotropic`: $\Sigma=I_d$.
-  - `low_rank`: $\Sigma=I_d+\Delta$, $\operatorname{rank}(\Delta)=16$.
+  - `low_rank`: $\Sigma=I_d+\Delta$, $\mathrm{rank}(\Delta)=16$.
   - `polynomial, alpha=0.2`: $\lambda_k=k^{-0.2}$.
   - `polynomial, alpha=0.5`: $\lambda_k=k^{-0.5}$.
   - `polynomial, alpha=0.8`: $\lambda_k=k^{-0.8}$.
@@ -318,7 +318,7 @@ $$
 \Sigma\in
 \left\{
 I_d,\;
-\operatorname{diag}(1^{-\alpha},2^{-\alpha},\ldots,d^{-\alpha})
+\mathrm{diag}(1^{-\alpha},2^{-\alpha},\ldots,d^{-\alpha})
 \;:\;\alpha\in\{0.2,0.5,0.8\}
 \right\}.
 $$
@@ -407,7 +407,7 @@ Required checks:
 
 - Within each $\alpha$, only $\lVert\mu\rVert_2$ may change.
 - Cross-$\alpha$ comparisons must be interpreted as changing the spectrum structure, not only signal strength.
-- The CSV must save $\operatorname{tr}(\Sigma)$, $\lVert\Sigma\rVert_F$, $\lVert\Sigma\rVert_2$, $\lVert\mu\rVert_\Sigma$, $\lVert\mu\rVert_{\Sigma^{-1}}$, $M_{\mathrm{trace}}$, $M_\mu$, and $T$.
+- The CSV must save $\mathrm{tr}(\Sigma)$, $\lVert\Sigma\rVert_F$, $\lVert\Sigma\rVert_2$, $\lVert\mu\rVert_\Sigma$, $\lVert\mu\rVert_{\Sigma^{-1}}$, $M_{\mathrm{trace}}$, $M_\mu$, and $T$.
 
 Outputs:
 
@@ -484,10 +484,10 @@ The diagnostic fields are:
 
 | CSV field | Mathematical symbol | Expression | Scope |
 | --- | --- | --- | --- |
-| `M_trace` | $M_{\mathrm{trace}}$ | $\operatorname{tr}(\Sigma)/D(n,\mu,\Sigma)$ | all main experiments |
+| `M_trace` | $M_{\mathrm{trace}}$ | $\mathrm{tr}(\Sigma)/D(n,\mu,\Sigma)$ | all main experiments |
 | `M_mu` | $M_\mu$ | $\lVert\mu\rVert_2^2/\lVert\mu\rVert_\Sigma$ | all main experiments |
-| `T` | $T$ | $\dfrac{n\lVert\mu\rVert_2^4}{n\lVert\mu\rVert_\Sigma^2+\lVert\Sigma\rVert_F^2+n\lVert\Sigma\rVert_2^2}$ | all main experiments |
-| `M_iso` | $M_{\mathrm{iso}}$ | $\dfrac{d}{\max\{n^2,\;n\sqrt{\log n}\lVert\mu\rVert_2\}}$ | $\Sigma=I_d$ only |
+| `T` | $T$ | $\frac{n\lVert\mu\rVert_2^4}{n\lVert\mu\rVert_\Sigma^2+\lVert\Sigma\rVert_F^2+n\lVert\Sigma\rVert_2^2}$ | all main experiments |
+| `M_iso` | $M_{\mathrm{iso}}$ | $\frac{d}{\max\{n^2,\;n\sqrt{\log n}\lVert\mu\rVert_2\}}$ | $\Sigma=I_d$ only |
 
 Grouping:
 
