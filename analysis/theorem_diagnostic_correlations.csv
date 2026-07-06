@@ -1,0 +1,14 @@
+context,diagnostic,groups,corr_alignment,corr_alignment_log10_diagnostic
+E1 final checkpoint by Sigma and loss,M_trace,10,-0.7803823545868804,-0.671296914360822
+E1 final checkpoint by Sigma and loss,M_mu,10,0.3479257521575902,0.3479257521575902
+E1 final checkpoint by Sigma and loss,T,10,0.7750245973566507,0.702434685518524
+"E2 spectrum scaling by panel, Sigma and d/n",M_trace,56,-0.6424756211804907,-0.5709943162974913
+"E2 spectrum scaling by panel, Sigma and d/n",M_mu,56,0.19157603705251883,-0.04591173413241483
+"E2 spectrum scaling by panel, Sigma and d/n",T,56,0.9933875076452224,0.9776281537276925
+"E2 spectrum scaling by panel, Sigma and d/n",M_iso,14,-0.8124214439430986,-0.9203681800032087
+E3 polynomial signal threshold by alpha and ||mu||_2,M_trace,21,-0.565341016526286,-0.4890537708997655
+E3 polynomial signal threshold by alpha and ||mu||_2,M_mu,21,0.47499617498743435,0.548782095206011
+E3 polynomial signal threshold by alpha and ||mu||_2,T,21,0.4028732764989464,0.668566027246919
+E4 mu eigendirection by direction,M_trace,3,-0.8425433562996052,-0.8425433562996052
+E4 mu eigendirection by direction,M_mu,3,-0.42914240184575503,-0.7358393688078492
+E4 mu eigendirection by direction,T,3,-0.820149216924364,-0.8366893242531103
